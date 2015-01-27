@@ -1,0 +1,63 @@
+KerberosPAKE
+DEFINITIONS EXPLICIT TAGS ::= BEGIN
+
+IMPORTS
+    Int32, EncryptedData
+        FROM KerberosV5Spec2 {
+            iso(1) identified-organization(3)
+            dod(6) internet(1) security(5) kerberosV5(2)
+            modules(4) krb5spec2(2)
+        }; -- as defined in RFC 4120.
+
+-- PA-PAKE 150
+-- PA-PAKE-SPAKE 1
+-- PA-PAKE-JPAKE 2
+
+PAKEMessage ::= CHOICE {
+  support  [0] PAKEInfo,
+  exchange [1] PAKEData,
+  verifier [2] PAKEData,
+  ...
+}
+
+PAKEInfo ::= SEQUENCE {
+  ptypes   SEQUENCE (SIZE(1..MAX)) OF Int32,
+  supports SEQUENCE (SIZE(1..MAX)) OF PAKESupport,
+  ...
+}
+
+PAKESupport ::= SEQUENCE {
+  etype    Int32,
+  groups   SEQUENCE (SIZE(1..MAX)) OF OBJECT IDENTIFIER,
+  hashes   SEQUENCE (SIZE(1..MAX)) OF OBJECT IDENTIFIER,
+  ...
+}
+
+PAKEData ::= SEQUENCE {
+  ptype    Int32,
+  etype    Int32,
+  group    OBJECT IDENTIFIER,
+  hash     OBJECT IDENTIFIER,
+  data     OCTET STRING
+}
+
+JPAKEMessage ::= CHOICE {
+  step1  [0] JPAKEStep1,
+  step2  [1] JPAKEKey,
+  ...
+}
+
+JPAKEStep1 ::= SEQUENCE {
+  x1 JPAKEKey,
+  x2 JPAKEKey,
+  ...
+}
+
+JPAKEKey ::= SEQUENCE {
+  gv OCTET STRING,
+  r  OCTET STRING,
+  x  OCTET STRING,
+  ...
+}
+
+END

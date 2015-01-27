@@ -1,0 +1,31 @@
+KerberosV5Spec2 {
+        iso(1) identified-organization(3) dod(6) internet(1)
+        security(5) kerberosV5(2) modules(4) krb5spec2(2)
+} DEFINITIONS EXPLICIT TAGS ::= BEGIN
+
+-- OID arc for KerberosV5
+--
+-- This OID may be used to identify Kerberos protocol messages
+-- encapsulated in other protocols.
+--
+-- This OID also designates the OID arc for KerberosV5-related OIDs.
+--
+-- NOTE: RFC 1510 had an incorrect value (5) for "dod" in its OID.
+id-krb5         OBJECT IDENTIFIER ::= {
+        iso(1) identified-organization(3) dod(6) internet(1)
+        security(5) kerberosV5(2)
+}
+
+Int32           ::= INTEGER (-2147483648..2147483647)
+                    -- signed values representable in 32 bits
+
+UInt32          ::= INTEGER (0..4294967295)
+                    -- unsigned 32 bit values
+
+EncryptedData   ::= SEQUENCE {
+        etype   [0] Int32 -- EncryptionType --,
+        kvno    [1] UInt32 OPTIONAL,
+        cipher  [2] OCTET STRING -- ciphertext
+}
+
+END
