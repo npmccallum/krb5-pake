@@ -107,13 +107,19 @@ attempt(const EC_GROUP *grp, const uint8_t *digest, size_t dlen, BN_CTX *ctx)
 {
     EC_POINT *p = NULL;
     BIGNUM *x = NULL;
+    size_t glen;
     int y;
 
     if (grp == NULL || digest == NULL)
         return NULL;
 
+    glen = EC_POINT_point2oct(grp, EC_GROUP_get0_generator(grp),
+                              POINT_CONVERSION_COMPRESSED, NULL, 0, ctx);
+    if (glen-- == 0)
+        return NULL;
+
     y = digest[dlen - 1] & 1; /* Last bit. */
-    x = BN_bin2bn(digest, dlen - 1, NULL);
+    x = BN_bin2bn(digest, glen < dlen ? glen : dlen, NULL);
     if (x == NULL)
         return NULL;
 
