@@ -172,15 +172,10 @@ static bool
 print_curve(void *misc, EC_builtin_curve *curve, int digest,
             const char *oid, const char *m, const char *n)
 {
-    if (printf("%s (%s) / %s\n",
-               OBJ_nid2sn(curve->nid), oid,
-               OBJ_nid2sn(digest)) < 0)
+    if (printf("%s,%s,M,%s\n", OBJ_nid2sn(curve->nid), oid, m) < 0)
         return false;
 
-    if (printf("\tM: %s\n", m) < 0)
-        return false;
-
-    if (printf("\tN: %s\n\n", n) < 0)
+    if (printf("%s,%s,N,%s\n", OBJ_nid2sn(curve->nid), oid, n) < 0)
         return false;
 
     return true;
